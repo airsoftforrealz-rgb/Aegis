@@ -8,13 +8,48 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-enum UserRole { USER COMMISSIONER ADMIN }
-enum EventTier { COLLEGE VCT }
-enum EventStatus { UPCOMING LIVE COMPLETED }
-enum PlayerRole { DUELIST INITIATOR CONTROLLER SENTINEL FLEX }
-enum MatchStatus { SCHEDULED LIVE FINAL }
-enum DraftStatus { PENDING LIVE PAUSED COMPLETED }
-enum SlotType { STARTER BENCH }
+enum UserRole {
+  USER
+  COMMISSIONER
+  ADMIN
+}
+
+enum EventTier {
+  COLLEGE
+  VCT
+}
+
+enum EventStatus {
+  UPCOMING
+  LIVE
+  COMPLETED
+}
+
+enum PlayerRole {
+  DUELIST
+  INITIATOR
+  CONTROLLER
+  SENTINEL
+  FLEX
+}
+
+enum MatchStatus {
+  SCHEDULED
+  LIVE
+  FINAL
+}
+
+enum DraftStatus {
+  PENDING
+  LIVE
+  PAUSED
+  COMPLETED
+}
+
+enum SlotType {
+  STARTER
+  BENCH
+}
 
 model User {
   id String @id @default(cuid())
