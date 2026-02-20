@@ -1,0 +1,177 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserRole { USER COMMISSIONER ADMIN }
+enum EventTier { COLLEGE VCT }
+enum EventStatus { UPCOMING LIVE COMPLETED }
+enum PlayerRole { DUELIST INITIATOR CONTROLLER SENTINEL FLEX }
+enum MatchStatus { SCHEDULED LIVE FINAL }
+enum DraftStatus { PENDING LIVE PAUSED COMPLETED }
+enum SlotType { STARTER BENCH }
+
+model User {
+  id String @id @default(cuid())
+  email String @unique
+  name String?
+  role UserRole @default(USER)
+  createdAt DateTime @default(now())
+}
+
+model League {
+  id String @id @default(cuid())
+  name String
+  code String @unique
+  commissionerId String
+  settingsJson Json
+  createdAt DateTime @default(now())
+}
+
+model LeagueMember {
+  id String @id @default(cuid())
+  leagueId String
+  userId String
+  teamName String
+  joinedAt DateTime @default(now())
+}
+
+model Event {
+  id String @id @default(cuid())
+  name String
+  tier EventTier
+  region String
+  startAt DateTime
+  endAt DateTime
+  status EventStatus
+}
+
+model Team {
+  id String @id @default(cuid())
+  name String
+  shortName String
+  region String
+  logoUrl String
+}
+
+model Player {
+  id String @id @default(cuid())
+  ign String
+  role PlayerRole
+  teamId String
+  headshotUrl String
+  externalIdsJson Json
+}
+
+model Match {
+  id String @id @default(cuid())
+  eventId String
+  startsAt DateTime
+  status MatchStatus
+  rawJson Json
+}
+
+model PlayerMatchStat {
+  id String @id @default(cuid())
+  matchId String
+  playerId String
+  statsJson Json
+  fantasyPoints Float @default(0)
+  createdAt DateTime @default(now())
+}
+
+model ScoringPreset {
+  id String @id @default(cuid())
+  key String @unique
+  version Int
+  name String
+  rulesJson Json
+}
+
+model LeagueEvent {
+  id String @id @default(cuid())
+  leagueId String
+  eventId String
+  scoringPresetId String
+  draftStartsAt DateTime
+  draftEndsAt DateTime
+  rosterLockAt DateTime
+}
+
+model Draft {
+  id String @id @default(cuid())
+  leagueEventId String
+  status DraftStatus
+  roundCount Int
+  pickSeconds Int
+  startsAt DateTime?
+  endsAt DateTime?
+}
+
+model DraftPick {
+  id String @id @default(cuid())
+  draftId String
+  pickNumber Int
+  roundNumber Int
+  userId String
+  playerId String
+  pickedAt DateTime @default(now())
+  autoPicked Boolean @default(false)
+}
+
+model Roster {
+  id String @id @default(cuid())
+  leagueEventId String
+  userId String
+}
+
+model RosterSlot {
+  id String @id @default(cuid())
+  rosterId String
+  playerId String
+  slotType SlotType
+  active Boolean @default(true)
+}
+
+model Period {
+  id String @id @default(cuid())
+  leagueEventId String
+  name String
+  startsAt DateTime
+  endsAt DateTime
+  lockAt DateTime
+}
+
+model Lineup {
+  id String @id @default(cuid())
+  leagueEventId String
+  userId String
+  periodId String
+  lineupJson Json
+  lockedAt DateTime?
+}
+
+model Score {
+  id String @id @default(cuid())
+  leagueEventId String
+  userId String
+  periodId String
+  points Float
+  breakdownJson Json
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id String @id @default(cuid())
+  actorUserId String
+  action String
+  entityType String
+  entityId String
+  payloadJson Json
+  createdAt DateTime @default(now())
+}
