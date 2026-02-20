@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 214 33% 6%;
+  --surface: 221 39% 11%;
+  --surface-alt: 217 45% 8%;
+  --border: 214 33% 20%;
+  --text: 220 13% 91%;
+  --muted: 220 9% 65%;
+  --primary: 355 100% 63%;
+  --primary-hover: 355 100% 71%;
+  --accent: 187 83% 52%;
+  --success: 142 71% 45%;
+  --warning: 38 92% 50%;
+  --danger: 0 84% 60%;
+}
+
+body {
+  @apply bg-background text-text font-body;
+}
+
+.panel {
+  @apply rounded-card border border-border bg-surface;
+}
+
+.btn-primary {
+  @apply rounded-input bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primaryHover disabled:opacity-50;
+}
